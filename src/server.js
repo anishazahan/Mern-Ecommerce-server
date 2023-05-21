@@ -6,19 +6,34 @@ const port = 5000
 
 
 app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+
+const isLoggedIn =(req,res,next)=>{
+
+    const user = true;
+    if(user){
+        req.body.id= 100;
+        next()
+    }else{
+       return res.status(401).json({
+            message:"unauthorized user"
+        })
+    }
+ 
+}
 
 app.get('/', (req, res) => {
   res.send('Hello World!xcvxb')
 })
-app.post('/', (req, res) => {
-  res.send('post method')
+
+app.get('/api/user',isLoggedIn, (req, res) => {
+    console.log(req.body.id);
+  res.status(200).send({
+    message:"user progile is login"
+  })
 })
-app.put('/', (req, res) => {
-  res.send('put method')
-})
-app.delete('/', (req, res) => {
-  res.send('delete method')
-})
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
