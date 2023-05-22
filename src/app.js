@@ -3,14 +3,29 @@ const express = require('express');
 const app = express();
 const morgan = require("morgan");
 const createError = require('http-errors')
-var xssClean = require('xss-clean')
+const xssClean = require('xss-clean');
+const rateLimit = require('express-rate-limit')
 
 
+//  rate limit define
 
+const limiter = rateLimit({
+	windowMs: 1* 60 * 1000, // 1 minutes
+	max: 5, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+	// standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	// legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    message:"To many request from this IP. Please try again later"
+})
+
+
+// use middleware----
+app.use(limiter)
 app.use(xssClean());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+
+
 
 const isLoggedIn =(req,res,next)=>{
 
@@ -26,16 +41,22 @@ const isLoggedIn =(req,res,next)=>{
  
 }
 
-app.get('/', (req, res) => {
+
+//  testing api------
+
+app.get('/', limiter,(req, res) => {
   res.send('Hello World!xcvxb')
 })
 
+
+//  with middleware api-----
 app.get('/api/user',isLoggedIn, (req, res) => {
     console.log(req.body.id);
   res.status(200).send({
     message:"user progile is login"
   })
 })
+
 
 
 // client error handeling--
@@ -51,6 +72,7 @@ app.use((req,res,next)=>{
 
 next(createError(404,"route not found"))
 })
+
 
 // server error  = all the errors
 
