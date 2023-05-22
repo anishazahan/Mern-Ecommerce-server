@@ -3,9 +3,11 @@ const express = require('express');
 const app = express();
 const morgan = require("morgan");
 const createError = require('http-errors')
+var xssClean = require('xss-clean')
 
 
 
+app.use(xssClean());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
