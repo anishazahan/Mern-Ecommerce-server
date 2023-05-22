@@ -1,9 +1,8 @@
-
-require('dotenv').config()
 const app = require('./app');
+const { serverPort } = require('./secret');
 
-const port = process.env.SERVER_PORT || 5001;
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+
+app.listen(serverPort, () => {
+  console.log(`Example app listening on port ${serverPort}`)
 })

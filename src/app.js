@@ -4,7 +4,8 @@ const app = express();
 const morgan = require("morgan");
 const createError = require('http-errors')
 const xssClean = require('xss-clean');
-const rateLimit = require('express-rate-limit')
+const rateLimit = require('express-rate-limit');
+const userRouter = require('./Router/userRouter');
 
 
 //  rate limit define
@@ -24,6 +25,7 @@ app.use(xssClean());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use("/api/user",userRouter)
 
 
 
@@ -44,9 +46,7 @@ const isLoggedIn =(req,res,next)=>{
 
 //  testing api------
 
-app.get('/', limiter,(req, res) => {
-  res.send('Hello World!xcvxb')
-})
+
 
 
 //  with middleware api-----
