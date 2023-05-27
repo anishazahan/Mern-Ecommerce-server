@@ -49,7 +49,7 @@ const isLoggedIn =(req,res,next)=>{
 
 
 //  with middleware api-----
-app.get('/api/user',isLoggedIn, (req, res) => {
+app.get('/api/user',isLoggedIn, (req, res,next) => {
     console.log(req.body.id);
   res.status(200).send({
     message:"user progile is login"
@@ -67,6 +67,8 @@ app.use((req,res,next)=>{
 
 next(createError(404,"route not found"))
 })
+
+
 
 
 // server error  = all the errors
