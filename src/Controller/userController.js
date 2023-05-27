@@ -6,7 +6,7 @@ const getUsers = async(req, res,next) => {
    try {
     const search = req.query.search || "";
     const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 1;
+    const limit = Number(req.query.limit) || 5;
 
      const searchRegExp = new RegExp( ".*" + search +".*",'i')
 
@@ -60,11 +60,25 @@ const getUsers = async(req, res,next) => {
   };
 
 
-  const getUserProfile = (req, res) => {
-    res.send('this is profile')
+  const getUserByID =async (req, res) => {
+   try {
+
+    const id = req.params.id;
+    const options = {password:0};
+    const findUser = await userModel.findById(id,options);
+    return successResponse(res,{
+      statusCode:200,
+      message:"Users get successfully By Id",
+      payload:{findUser}
+    })
+
+    
+   } catch (error) {
+     next(error)
+   }
   };
 
   module.exports = {
     getUsers,
-    getUserProfile
+    getUserByID
   }
