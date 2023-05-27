@@ -6,6 +6,7 @@ const createError = require('http-errors')
 const xssClean = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 const userRouter = require('./Router/userRouter');
+const seedRouter = require('./Router/seedRouter');
 
 
 //  rate limit define
@@ -25,7 +26,9 @@ app.use(xssClean());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+
 app.use("/api/user",userRouter)
+app.use("/api/seed",seedRouter)
 
 
 
@@ -44,11 +47,6 @@ const isLoggedIn =(req,res,next)=>{
 }
 
 
-//  testing api------
-
-
-
-
 //  with middleware api-----
 app.get('/api/user',isLoggedIn, (req, res) => {
     console.log(req.body.id);
@@ -57,16 +55,12 @@ app.get('/api/user',isLoggedIn, (req, res) => {
   })
 })
 
-
-
 // client error handeling--
 
 app.use((req,res,next)=>{
 //   res.status(404).json({
 //     message:"route not found"
 //   })
-
-
 // createError()
 //   next()
 
@@ -86,3 +80,10 @@ app.use((err, req, res, next) => {
 
 
   module.exports = app;
+
+
+
+
+
+
+

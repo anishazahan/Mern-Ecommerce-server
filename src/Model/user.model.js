@@ -1,9 +1,10 @@
-import exp from "constants";
-import { defaultImgPath } from "../secret";
+
+const { defaultImgPath } = require("../secret");
+const bcrypt = require('bcrypt');
 
 
 const { Schema,model } = require('mongoose');
-const bcrypt = require('bcrypt');
+
 
 
 const userSchema = new Schema({
@@ -19,23 +20,15 @@ const userSchema = new Schema({
         required:[true,"Email is required"],
         trim:true,
         lowercase:true,
-        unique:true
-    },
-    validator:{
+        unique:true,
+       validate:{
         validator:function(v){
             return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v)
 
         },
         message:"Please enter in a valid email"
-    },
-    password:{
-        type:String,
-        required:[true,"Password is required"],
-        minlength:[6,"The length the password must be minimum 6 characters"],
-        set:(v)=>{
-          bcrypt.hashSync(v, bcrypt.genSaltSync(10));
-        }
-    },
+    }
+   },
     image:{
         type:String,
         default: defaultImgPath
@@ -48,6 +41,14 @@ const userSchema = new Schema({
         type:String,
         required:[true,"Phone is required"],
     },
+    password:{
+    type:String,
+    required:[true,"Password must be required"],
+    minlength:[6,"The length the password must be minimum 6 characters"],
+    set: function (v) {
+        return bcrypt.hashSync(v, bcrypt.genSaltSync(10));
+      }
+},
     isAdmin:{
         type:Boolean,
        default:false
@@ -57,9 +58,12 @@ const userSchema = new Schema({
        default:false
     },
 
-},{
+},
+
+{
     timestamps:true
 });
 
-const userModel = model ("User",userSchema) ;
-model.exports = userModel;
+const userModel = model ("users",userSchema) ;
+
+module.exports = userModel;
