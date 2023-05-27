@@ -27,7 +27,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-app.use("/api/user",userRouter)
+app.use("/api/users",userRouter)
 app.use("/api/seed",seedRouter)
 
 
