@@ -101,18 +101,7 @@ const getUsers = async(req, res,next) => {
      deleteImage(userImagePath)
 
 
-    //  fs.access(userImagePath,(err)=>{
-    //    if(err){
-    //      console.error("user image doesn't exists");
-    //    }else{
-    //     fs.unlink(userImagePath,(err)=>{
-    //       if(error) throw error
-    //       console.log("user img was deleted")
-    //     })
-    //    }
-    //  })
-
-     await userModel.findByIdAndDelete({_id:id, isAdmin:false})
+    await userModel.findByIdAndDelete({_id:id, isAdmin:false})
 
     return successResponse(res,{
       statusCode:200,
@@ -133,9 +122,40 @@ const getUsers = async(req, res,next) => {
 
 
 
+  const processRegister =async (req, res,next) => {
+   try {
+
+     const {name,email,password,phone,address} = req.body;
+     const newUser = { name,email,password,phone,address}
+     const userExists = userModel.exists({email:email})
+     if (userExists) {
+       throw createError(409,"Email already exists ,Please Login in!")
+     }
+  
+    return successResponse(res,{
+      statusCode:200,
+      message:"User was created successfully",
+      payload:{newUser}
+     
+    })
+ 
+    
+  } catch (error) {
+    if(error instanceof mongoose.Error){
+      next(createError(404,"Invalid user Id"))
+      return;
+    }
+    next(error)
+  }
+  };
+
+
+
+
 
   module.exports = {
     getUsers,
     getUserByID,
-    deleteUserByID
+    deleteUserByID,
+    processRegister
   }
