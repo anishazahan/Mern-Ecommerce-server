@@ -1,18 +1,18 @@
 const createHttpError = require("http-errors");
-const userModel = require("../../Model/user.model");
 const { default: mongoose } = require("mongoose");
+const { modelName } = require("../../Model/user.model");
 
-const findById = async(id,options={})=>{
+const findById = async(Model,id,options={})=>{
    try {
   
-    const findItem = await userModel.findById(id,options);
+    const findItem = await Model.findById(id,options);
 
-    if(!findItem) {throw createHttpError(404,"Item doesn't exists with this ID")}
+    if(!findItem) {throw createHttpError(404,`Data doesn't exists with this ID`)}
     return findItem;
    } catch (error) {
 
     if(error instanceof mongoose.Error){
-        throw createError(404,"Invalid item with this Id");
+        throw createHttpError(404,"Invalid item with this Id");
       }
 
       throw error;

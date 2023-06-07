@@ -70,7 +70,7 @@ const getUsers = async(req, res,next) => {
 
     const id = req.params.id;
     const options = {password:0};
-    const findUser =await findById(id,options);
+    const findUser =await findById(userModel,id,options);
     return successResponse(res,{
       statusCode:200,
       message:"Items get successfully By Id",
@@ -93,7 +93,7 @@ const getUsers = async(req, res,next) => {
 
     const id = req.params.id;
     const options = {password:0};
-    const findUser =await findById(id,options);
+    const findUser =await findById(userModel,id,options);
 
      const userImagePath = findUser.image;
      fs.access(userImagePath,(err)=>{
