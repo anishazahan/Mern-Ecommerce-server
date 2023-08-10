@@ -4,6 +4,8 @@ const { successResponse } = require('./responseController');
 const { default: mongoose } = require('mongoose');
 const { findById } = require('../services/user-services/findById');
 const { deleteImage } = require('../helper/deleteImage');
+const { createJsonWebToken } = require('../helper/jsonWebToken');
+const { jwtActivationKey } = require('../secret');
 
 
 
@@ -122,32 +124,33 @@ const getUsers = async(req, res,next) => {
 
 
 
-  const processRegister =async (req, res,next) => {
-   try {
+  const processRegister = async (req, res, next) => {
+  try {
+    const { name, email, password, phone, address } = req.body;
+    const userExists = await userModel.exists({ email: email });
 
-     const {name,email,password,phone,address} = req.body;
-     const newUser = { name,email,password,phone,address}
-     const userExists = userModel.exists({email:email})
-     if (userExists) {
-       throw createError(409,"Email already exists ,Please Login in!")
-     }
-  
-    return successResponse(res,{
-      statusCode:200,
-      message:"User was created successfully",
-      payload:{newUser}
-     
-    })
- 
-    
-  } catch (error) {
-    if(error instanceof mongoose.Error){
-      next(createError(404,"Invalid user Id"))
-      return;
+    if (userExists) {
+      throw createError(409, "Email already exists, Please Login in!");
     }
-    next(error)
+
+    const token = createJsonWebToken(
+      { name, email, password, phone, address },
+      jwtActivationKey,
+      "20m"
+    );
+
+    const newUser = { name, email, password, phone, address };
+    return successResponse(res, {
+      statusCode: 200,
+      message: "User was created successfully",
+      payload: { token },
+    });
+  } catch (error) {
+    next(error);
   }
-  };
+};
+
+  
 
 
 
