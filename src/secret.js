@@ -6,6 +6,7 @@ const defaultImgPath = process.env.DEFAULT_USER_IMG_PATH || "../public/img/user/
 const jwtActivationKey = process.env.JWT_ACTIVATION_KEY || "uiewr83499999999777777777777"
 const smtpPassword = process.env.SMTP_PASSWORD || ""
 const smtpUserName = process.env.SMTP_USERNAME || ""
+const clientUrl = process.env.CLIENT_URL || ""
 
 module.exports={
     serverPort,
@@ -13,7 +14,8 @@ module.exports={
     defaultImgPath,
     jwtActivationKey,
     smtpPassword,
-    smtpUserName
+    smtpUserName,
+    clientUrl
 }
 
 

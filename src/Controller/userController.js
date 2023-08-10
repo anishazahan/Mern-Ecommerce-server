@@ -5,7 +5,7 @@ const { default: mongoose } = require('mongoose');
 const { findById } = require('../services/user-services/findById');
 const { deleteImage } = require('../helper/deleteImage');
 const { createJsonWebToken } = require('../helper/jsonWebToken');
-const { jwtActivationKey } = require('../secret');
+const { jwtActivationKey, clientUrl } = require('../secret');
 
 
 
@@ -133,13 +133,30 @@ const getUsers = async(req, res,next) => {
       throw createError(409, "Email already exists, Please Login in!");
     }
 
+    // .... create token......
     const token = createJsonWebToken(
       { name, email, password, phone, address },
       jwtActivationKey,
       "20m"
     );
 
-    const newUser = { name, email, password, phone, address };
+      // .... prepare email......
+
+        const emailData = {
+          email,
+          subject:"Account Activation Email",
+          html:`
+          <h2> Hellow ${name} !</h2>
+          <P>Please Click here to this link <a target=_blank href='${clientUrl}/api/users/activate/${token}'>activate your account</a> </P>
+          
+          `
+        }
+
+
+
+      // .... senm mail with nodemailer......
+
+   
     return successResponse(res, {
       statusCode: 200,
       message: "User was created successfully",
