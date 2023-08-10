@@ -7,6 +7,7 @@ const jwtActivationKey = process.env.JWT_ACTIVATION_KEY || "uiewr834999999997777
 const smtpPassword = process.env.SMTP_PASSWORD || ""
 const smtpUserName = process.env.SMTP_USERNAME || ""
 const clientUrl = process.env.CLIENT_URL || ""
+const uploadDir = process.env.UPLOAD_FILE || "public/img/user"
 
 module.exports={
     serverPort,
@@ -15,7 +16,8 @@ module.exports={
     jwtActivationKey,
     smtpPassword,
     smtpUserName,
-    clientUrl
+    clientUrl,
+    uploadDir
 }
 
 

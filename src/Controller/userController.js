@@ -156,7 +156,7 @@ const getUsers = async(req, res,next) => {
 
       // .... send mail with nodemailer......
       try {
-        await sendEmailWithNodemailer(emailData)
+        // await sendEmailWithNodemailer(emailData)
         
       } catch (emailError) {
        next(createError(500,"faield to send verification email"))
