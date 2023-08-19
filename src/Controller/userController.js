@@ -113,7 +113,9 @@ const deleteUserByID = async (req, res, next) => {
 const processRegister = async (req, res, next) => {
   try {
     const { name, email, password, phone, address } = req.body;
-    console.log(name, email);
+    // console.log(name, email);
+
+    const imgBufferString = req.file.buffer.toString("base64");
     const userExists = await userModel.exists({ email: email });
 
     if (userExists) {
@@ -122,7 +124,7 @@ const processRegister = async (req, res, next) => {
 
     // .... create token......
     const token = createJsonWebToken(
-      { name, email, password, phone, address },
+      { name, email, password, phone, address, image: imgBufferString },
       jwtActivationKey,
       "20m"
     );
