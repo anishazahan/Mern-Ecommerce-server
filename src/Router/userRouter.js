@@ -10,7 +10,7 @@ const {
 const upload = require("../middleware/upload-flies");
 const { validateUserRegistration } = require("../Validators/auth");
 const runValidation = require("../Validators");
-const { isLoggedIn, isLoggedOut } = require("../middleware/auth");
+const { isLoggedIn, isLoggedOut, isAdmin } = require("../middleware/auth");
 
 const userRouter = express.Router();
 
@@ -24,7 +24,7 @@ userRouter.post(
 );
 
 userRouter.post("/verify", isLoggedOut, activateUserAccount);
-userRouter.get("/", isLoggedIn, getUsers);
+userRouter.get("/", isLoggedIn, isAdmin, getUsers);
 userRouter.get("/:id", isLoggedIn, getUserByID);
 userRouter.put("/:id", upload.single("image"), isLoggedIn, updateUserByID);
 userRouter.delete("/:id", isLoggedIn, deleteUserByID);
