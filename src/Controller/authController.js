@@ -29,9 +29,9 @@ const handleLogin = async (req, res, next) => {
     }
 
     // .... create token......
-    const accessToken = createJsonWebToken({ email }, jwtAccessKeyKey, "20m");
-    res.cookie("access_token", accessToken, {
-      maxAge: 15 * 60 * 1000,
+    const accessToken = createJsonWebToken({ user }, jwtAccessKeyKey, "20m");
+    res.cookie("accessToken", accessToken, {
+      maxAge: 20 * 60 * 1000,
       httpOnly: true,
       secure: true,
       sameSite: none,
@@ -49,7 +49,7 @@ const handleLogin = async (req, res, next) => {
 
 const handleLogout = async (req, res, next) => {
   try {
-    res.clearCookie(access_token);
+    res.clearCookie(accessToken);
     return successResponse(res, {
       statusCode: 200,
       message: "User logout successfully.",
