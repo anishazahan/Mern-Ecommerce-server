@@ -28,7 +28,7 @@ const fileFilter = (req, file, cb) => {
   // }
   // cb(null, true);
   if (!file.mimetype.startsWith("image/")) {
-    return cb(new Error("Only Image file is allowed."), false);
+    return cb(new Error("Only image file is allowed."), false);
   }
 
   if (file.size > MAX_FILE_SIZE) {
@@ -37,7 +37,7 @@ const fileFilter = (req, file, cb) => {
   if (!FILE_EXT.includes(file.mimetype)) {
     return cb(new Error("File type is not allowed."), false);
   }
-  cd(null, true);
+  cb(null, true);
 };
 const upload = multer({
   storage: storage,
